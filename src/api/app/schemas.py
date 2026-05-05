@@ -53,7 +53,10 @@ class DeviceOut(BaseModel):
         if self.last_seen is None:
             return "offline"
         threshold = timedelta(seconds=OFFLINE_THRESHOLD_SECONDS)
-        if datetime.now(timezone.utc) - self.last_seen > threshold:
+        last_seen = self.last_seen
+        if last_seen.tzinfo is None:
+            last_seen = last_seen.replace(tzinfo=timezone.utc)
+        if datetime.now(timezone.utc) - last_seen > threshold:
             return "offline"
         if self.applied_version < self.config_version:
             return "pending"
