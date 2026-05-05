@@ -7,8 +7,8 @@ data:
   API_HOST: "0.0.0.0"
   API_PORT: "8000"
   WG_HUB_IP: "192.168.254.1"
-  WG_HUB_PUBLIC_KEY: ""        # set to hub's wg public key after deploy
-  WG_ENDPOINT: ""              # e.g. wg-hermes.manabo.org:443
+  WG_HUB_PUBLIC_KEY: "RMLhN4zvPxdXEdjvq+7J1cAIi0z3itd0jHyiUTm6oCg="
+  WG_ENDPOINT: "wg-hermes.manabo.org:443"
   WG_PEER_SUBNET: "192.168.254.0/24"
   WG_ALLOWED_IPS: "192.168.0.0/16,10.0.0.0/8,10.42.0.0/16,10.43.0.0/16"
   GRE_BASE: "10.0"
