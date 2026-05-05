@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: infrarouter-config
+  namespace: infrarouter
+data:
+  API_HOST: "0.0.0.0"
+  API_PORT: "8000"
+  WG_HUB_IP: "192.168.254.1"
+  WG_PEER_SUBNET: "192.168.254.0/24"
+  GRE_BASE: "10.0"
+  SYNC_INTERVAL_SECONDS: "60"
+  OFFLINE_THRESHOLD_SECONDS: "300"
