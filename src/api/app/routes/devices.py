@@ -33,6 +33,10 @@ def sync(
     if req.applied_version >= device.config_version:
         return SyncResponse(version=device.config_version, config=None)
 
-    # TODO step 3: build full config payload
-    config_payload: dict = {}
-    return SyncResponse(version=device.config_version, config=config_payload)
+    local = crud.get_local_config(db, device.device_id)
+    global_cfg = crud.get_global_config(db)
+    from ..config_builder import build_config
+    return SyncResponse(
+        version=device.config_version,
+        config=build_config(device, local, global_cfg),
+    )
