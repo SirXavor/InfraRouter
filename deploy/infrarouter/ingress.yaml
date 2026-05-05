@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: infrarouter
+  namespace: infrarouter
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    external-dns.alpha.kubernetes.io/hostname: infrarouter.hermes.ranabo.com
+    external-dns.alpha.kubernetes.io/target: hermes.ranabo.com
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: infrarouter.hermes.ranabo.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: infrarouter
+                port:
+                  name: http
+  tls:
+    - hosts:
+        - infrarouter.hermes.ranabo.com
+      secretName: hermes-wildcard-tls
