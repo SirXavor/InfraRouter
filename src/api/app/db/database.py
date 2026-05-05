@@ -22,6 +22,6 @@ def get_db():
         db.close()
 
 
-def init_db():
+def init_db(bind=None):
     from . import models  # noqa: ensure models are registered
-    Base.metadata.create_all(bind=engine)
+    Base.metadata.create_all(bind=bind or engine)
