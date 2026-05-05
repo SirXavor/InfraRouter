@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Global Config</h1>
+<div class="card">
+  <form method="post" action="/panel/global">
+    <div class="form-grid">
+
+      <div class="form-group">
+        <label>DNS Servers</label>
+        <input type="text" name="dns" value="{{ dns }}" placeholder="8.8.8.8, 8.8.4.4">
+        <div class="hint">Comma-separated — pushed to DHCP clients (option 6)</div>
+      </div>
+
+      <div class="form-group">
+        <label>NTP Servers</label>
+        <input type="text" name="ntp" value="{{ ntp }}" placeholder="0.pool.ntp.org, 1.pool.ntp.org">
+        <div class="hint">Comma-separated hostnames or IPs</div>
+      </div>
+
+      <div class="form-group form-full">
+        <label>PXE TFTP Server</label>
+        <input type="text" name="pxe_tftp_server" value="{{ cfg.pxe_tftp_server or '' }}" placeholder="192.168.254.1">
+        <div class="hint">Hub WireGuard IP — leave empty to disable PXE on spokes</div>
+      </div>
+
+      <div class="form-group">
+        <label>PXE EFI Boot File</label>
+        <input type="text" name="pxe_boot_file_efi" value="{{ cfg.pxe_boot_file_efi }}">
+      </div>
+
+      <div class="form-group">
+        <label>PXE BIOS Boot File</label>
+        <input type="text" name="pxe_boot_file_bios" value="{{ cfg.pxe_boot_file_bios }}">
+      </div>
+
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save</button>
+      <span class="muted">Config version: {{ cfg.version }}</span>
+    </div>
+  </form>
+</div>
+{% endblock %}

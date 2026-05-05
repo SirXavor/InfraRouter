@@ -6,7 +6,7 @@ from .db.database import init_db, SessionLocal
 from .db import crud
 from .db.models import DeviceStatus
 from . import wg_hub
-from .routes import devices, config, admin
+from .routes import devices, config, admin, panel
 
 log = logging.getLogger(__name__)
 
@@ -38,6 +38,7 @@ app = FastAPI(title="InfraRouter API", lifespan=lifespan)
 app.include_router(admin.router, prefix="/admin", tags=["admin"])
 app.include_router(devices.router, prefix="/devices", tags=["devices"])
 app.include_router(config.router, prefix="/config", tags=["config"])
+app.include_router(panel.router, prefix="/panel", tags=["panel"])
 
 
 @app.get("/health")

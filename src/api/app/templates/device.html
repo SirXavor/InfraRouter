@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+  <a href="/panel/" class="btn btn-ghost">← Back</a>
+  <h1 style="margin:0">{{ device.device_id }}</h1>
+  <span class="badge badge-{% if device.sync_status == 'n/a' %}na{% else %}{{ device.sync_status }}{% endif %}">
+    {{ device.sync_status }}
+  </span>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start;">
+
+  <div class="card">
+    <div class="card-header"><h2>Device Info</h2></div>
+    <table>
+      <tbody>
+        <tr>
+          <td class="muted" style="width:140px; white-space:nowrap">Hostname</td>
+          <td>{{ device.hostname or '—' }}</td>
+        </tr>
+        <tr>
+          <td class="muted">Status</td>
+          <td><span class="badge badge-{{ device.status.value }}">{{ device.status.value }}</span></td>
+        </tr>
+        <tr>
+          <td class="muted">WG Peer Index</td>
+          <td class="mono">{{ device.wg_peer_index }}</td>
+        </tr>
+        <tr>
+          <td class="muted">WG Address</td>
+          <td class="mono">192.168.254.{{ device.wg_peer_index }}/32</td>
+        </tr>
+        <tr>
+          <td class="muted">GRE Hub</td>
+          <td class="mono">10.0.{{ device.wg_peer_index }}.1 / .2</td>
+        </tr>
+        <tr>
+          <td class="muted">Last Seen</td>
+          <td class="muted">{{ device.last_seen.strftime('%Y-%m-%d %H:%M:%S') if device.last_seen else '—' }}</td>
+        </tr>
+        <tr>
+          <td class="muted">Config Version</td>
+          <td>{{ device.config_version }}</td>
+        </tr>
+        <tr>
+          <td class="muted">Applied Version</td>
+          <td>{{ device.applied_version }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="form-actions">
+      <form class="inline" method="post" action="/panel/devices/{{ device.device_id }}/revoke"
+            onsubmit="return confirm('Revoke {{ device.device_id }}? This will remove it from WireGuard.')">
+        <button type="submit" class="btn btn-danger">Revoke Device</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><h2>Local Config</h2></div>
+    <form method="post" action="/panel/devices/{{ device.device_id }}/local">
+      <div class="form-grid" style="grid-template-columns:1fr;">
+        <div class="form-group">
+          <label>LAN Network</label>
+          <input type="text" name="lan_network" value="{{ local.lan_network if local else '' }}"
+                 placeholder="192.168.2.0/24" required>
+          <div class="hint">CIDR notation — e.g. 192.168.2.0/24</div>
+        </div>
+        <div class="form-group">
+          <label>LAN IP (router)</label>
+          <input type="text" name="lan_ip" value="{{ local.lan_ip if local else '' }}"
+                 placeholder="192.168.2.1" required>
+          <div class="hint">Default gateway IP on the spoke's LAN</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Save</button>
+        {% if local %}<span class="muted">OSPF will announce {{ local.lan_network }}</span>{% endif %}
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}
